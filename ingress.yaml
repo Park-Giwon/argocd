@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: review-ingress
+  annotations:
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:137783545568:certificate/5845ef09-f2b6-4e32-b409-113abd983aa6
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP": 80}]'
+    alb.ingress.kubernetes.io/target-type: ip
+    kubernetes.io/ingress.class: alb
+  labels:
+    app: review-ingress
+spec:
+  # backend:
+  # serviceName: rollout-bluegreen-active
+  #  servicePort: 8080
+  rules:
+    - http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: rollout-bluegreen-active
+              servicePort: 8080
